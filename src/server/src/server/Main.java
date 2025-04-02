@@ -8,6 +8,9 @@ public class Main {
 	
 	public static void main(String[] args) throws IOException {
 		Server server = new Server();
+		ServerProcessor serverProcessor = new ServerProcessor(PORT, server);
+		serverProcessor.process();
+		/*Server server = new Server();
 		server.start(PORT);
 		server.acceptConnection();
 		
@@ -17,7 +20,7 @@ public class Main {
 		String message = "Message from server";
 		server.send(message);
 		
-		server.close();
+		server.close();*/
 		
 		// TODO Auto-generated method stub
 

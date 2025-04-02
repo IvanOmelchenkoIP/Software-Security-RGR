@@ -10,6 +10,10 @@ public class Main {
 	
 	public static void main(String[] args) throws UnknownHostException, IOException {
 		Client client = new Client();
+		ClientProcessor clientProcessor = new ClientProcessor(IP, PORT, client);
+		clientProcessor.process();
+		
+		/*Client client = new Client();
 		client.connect(IP, PORT);
 		String message = "Message from client";
 		client.send(message);
@@ -17,7 +21,7 @@ public class Main {
 		String messageFromServer = client.receive();
 		System.out.println(messageFromServer);
 		
-		client.close();
+		client.close();*/
 		
 		// TODO Auto-generated method stub
 

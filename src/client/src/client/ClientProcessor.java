@@ -15,12 +15,18 @@ public class ClientProcessor {
 	}
 	
 	public void process() throws IOException {
+		RandomGenerator randomGenerator = new RandomGenerator();
+		
 		client.connect(ip, port);
 		
-		Handshake handshake = new Handshake(client);
+		System.out.println("Connected to server");
+		
+		Handshake handshake = new Handshake(client, randomGenerator);
 		handshake.initiate();
 		
 		client.close();		
+		
+		System.out.println("Connection closed");
 	}
 	
 }

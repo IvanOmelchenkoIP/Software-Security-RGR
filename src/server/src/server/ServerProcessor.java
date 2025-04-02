@@ -13,13 +13,18 @@ public class ServerProcessor {
 	}
 	
 	public void process() throws IOException {
-		server.start(port);
-		server.acceptConnection();
+		RandomGenerator randomGenerator = new RandomGenerator();
 		
-		Handshake handshake = new Handshake(server);
+		server.start(port);
+		System.out.println("Started server");
+		server.acceptConnection();
+		System.out.println("Accepted connection from client");
+		
+		Handshake handshake = new Handshake(server, randomGenerator);
 		handshake.initiate();
 		
 		server.close();
+		System.out.println("Closing server");
 	}
 	
 }
