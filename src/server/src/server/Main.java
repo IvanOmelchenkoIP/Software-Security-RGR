@@ -16,9 +16,6 @@ public class Main {
 		Server server = new Server();
 		ServerProcessor serverProcessor = new ServerProcessor(PORT, server);
 		serverProcessor.process();
-		
-		// TODO Auto-generated method stub
-
 	}
 
 }

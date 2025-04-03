@@ -19,9 +19,5 @@ public class Main {
 		Client client = new Client();
 		ClientProcessor clientProcessor = new ClientProcessor(IP, PORT, client);
 		clientProcessor.process();
-		
-		// TODO Auto-generated method stub
-
 	}
-
 }

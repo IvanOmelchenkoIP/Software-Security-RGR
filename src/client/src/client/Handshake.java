@@ -1,14 +1,12 @@
 package client;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.Base64;
 import java.util.Base64.Decoder;
 import java.util.Base64.Encoder;
 
@@ -20,16 +18,23 @@ import javax.crypto.NoSuchPaddingException;
 public class Handshake {
 	
 	private Client client;
-	private RandomGenerator randomGenerator;
+	private Encoder base64Encoder;
+	private Decoder base64Decoder;
+	private SessionKey sessionKey;
+	private SessionEncryptor sessionEncryptor;
+	private SessionDecryptor sessionDecryptor;
 	
-	Handshake(Client client, RandomGenerator randomGenerator) {
+	Handshake(Client client, Encoder base64Encoder, Decoder base64Decoder, SessionKey sessionKey, SessionEncryptor sessionEncryptor, SessionDecryptor sessionDecryptor) {
 		this.client = client;
-		this.randomGenerator = randomGenerator;
+		this.base64Encoder = base64Encoder;
+		this.base64Decoder = base64Decoder;
+		this.sessionKey = sessionKey;
+		this.sessionEncryptor = sessionEncryptor;
+		this.sessionDecryptor = sessionDecryptor;
 	}
 	
 	public void initiate(int helloMessageSize, int premasterSize, String cipherAlgorithm) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-		Encoder base64Encoder = Base64.getEncoder();
-		Decoder base64Decoder = Base64.getDecoder();
+		RandomGenerator randomGenerator = new RandomGenerator();
 		
 		byte[] clientHello = randomGenerator.generate(helloMessageSize);
 		String clientHelloEncoded = base64Encoder.encodeToString(clientHello);
@@ -55,5 +60,22 @@ public class Handshake {
 		client.send(premasterEncoded);
 		System.out.println("Sent premaster key to server");
 		
+		sessionKey.setSessionKey(SessionKeyGenerator.generate(clientHello, serverHello, premaster));
+		sessionEncryptor.init(sessionKey);
+		sessionDecryptor.init(sessionKey);
+		
+		String serverReadyEncoded = client.receive();
+		byte[] serverReadyEncrypted = base64Decoder.decode(serverReadyEncoded);
+		byte[] serverReadyBytes = sessionDecryptor.decrypt(serverReadyEncrypted);
+		String serverReady = new String(serverReadyBytes);
+		System.out.println("Received ready message from server: " + serverReady);
+		
+		String readyMessage = "Client ready";
+		byte[] readyMessageEncrypted = sessionEncryptor.encrypt(readyMessage.getBytes());
+		String readyMessageEncoded = base64Encoder.encodeToString(readyMessageEncrypted);
+		client.send(readyMessageEncoded);
+		System.out.println("Sent client ready");
+		
+		System.out.println("Exchanged encrypted messages. Handshake ended");
 	}
 }
