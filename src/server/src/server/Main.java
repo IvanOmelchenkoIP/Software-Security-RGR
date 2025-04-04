@@ -8,6 +8,9 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
+import server.connection.Server;
+import server.connection.ServerProcessor;
+
 public class Main {
 
 	private static int PORT = 10002;

@@ -1,24 +1,18 @@
-package server;
+package client.connection;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server {
+public class Client {
 
-	private ServerSocket serverSocket;
 	private Socket clientSocket;
 	private DataOutputStream outputStream;
 	private DataInputStream inputStream;
 	
-	public void start(int port) throws IOException {
-		serverSocket = new ServerSocket(port);
-	}
-	
-	public void acceptConnection() throws IOException {
-		clientSocket = serverSocket.accept();
+	public void connect(String ip, int port) throws IOException {
+		clientSocket = new Socket(ip, port);
 		outputStream = new DataOutputStream(clientSocket.getOutputStream());
 		inputStream = new DataInputStream(clientSocket.getInputStream());
 	}
@@ -35,6 +29,5 @@ public class Server {
 		outputStream.close();
 		inputStream.close();
 		clientSocket.close();
-		serverSocket.close();
 	}
 }

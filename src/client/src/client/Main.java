@@ -10,6 +10,9 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
+import client.connection.Client;
+import client.connection.ClientProcessor;
+
 public class Main {
 
 	private static String IP = "127.0.0.1";

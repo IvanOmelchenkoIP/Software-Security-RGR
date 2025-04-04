@@ -1,12 +1,12 @@
-package server;
+package server.util;
 
 import java.security.SecureRandom;
 
-public class RandomGenerator {
+public class SecureRandomGeneratorUtil {
 	
 	private SecureRandom secureRandom;
 	
-	RandomGenerator() {
+	public SecureRandomGeneratorUtil() {
 		secureRandom = new SecureRandom();
 	}
 	

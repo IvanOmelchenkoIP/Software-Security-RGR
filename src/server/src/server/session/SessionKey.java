@@ -1,4 +1,4 @@
-package client;
+package server.session;
 
 public class SessionKey {
 
