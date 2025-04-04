@@ -17,7 +17,7 @@ public class ClientProcessor {
 	private static final int HELLO_MESSAGE_SIZE = 32;
 	private static final int PREMASTER_SIZE = 48;
 	private static final String HANDSHAKE_ALGORITHM = "RSA";
-	private static final String FILE_TO_READ = "../resources/data.txt";
+	private static final String FILE_TO_READ = "./resources/data.txt";
 	
 	private String ip;
 	private int port;
@@ -34,7 +34,7 @@ public class ClientProcessor {
 		
 		client.connect(ip, port);
 		
-		System.out.println("Connected to server");
+		System.out.println("Connected to server via port " + port);
 		
 		Handshake handshake = new Handshake(client, sessionCipherMessageManager);
 		handshake.initiate(HELLO_MESSAGE_SIZE, PREMASTER_SIZE, HANDSHAKE_ALGORITHM);
@@ -42,11 +42,11 @@ public class ClientProcessor {
 		String clientfileContents = FileReaderUtil.read(FILE_TO_READ);
 		String clientFileContentsEncoded = sessionCipherMessageManager.prepareToSend(clientfileContents);
 		client.send(clientFileContentsEncoded);
-		System.out.println("Sensing file contents to the server:\n" + clientfileContents);
+		System.out.println("Sending file contents to the server:\n\"\"\"\n" + clientfileContents + "\n\"\"\"");
 		
 		String serverFileContentsEncoded = client.receive();
 		String serverFileContents = sessionCipherMessageManager.extractReceived(serverFileContentsEncoded);
-		System.out.println("Received file contents from server:\n" + serverFileContents);
+		System.out.println("Received file contents from server:\\n\\\"\\\"\\\"\\n" + serverFileContents + "\n\"\"\"");
 		
 		client.close();		
 		

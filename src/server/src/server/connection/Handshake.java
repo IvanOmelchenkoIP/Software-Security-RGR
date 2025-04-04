@@ -37,12 +37,12 @@ public class Handshake {
 		
 		String clientHelloEncoded = server.receive();
 		byte[] clientHello = base64Decoder.decode(clientHelloEncoded);
-		System.out.println("Received client hello");
+		System.out.println("Received client hello. Encoded: " + clientHelloEncoded);
 		
 		byte[] serverHello = randomGenerator.generate(helloMessageSize);
 		String serverHelloEncoded = base64Encoder.encodeToString(serverHello);
 		server.send(serverHelloEncoded);
-		System.out.println("Sent server hello");
+		System.out.println("Sent server hello. Encoded: " + serverHello);
 		
 		KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(cipherAlgorithm);
 		keyPairGenerator.initialize(keyPairSize);
@@ -50,14 +50,14 @@ public class Handshake {
 		PublicKey publicKey = keyPair.getPublic();
 		String publicKeyEncoded = base64Encoder.encodeToString(publicKey.getEncoded());
 		server.send(publicKeyEncoded);
-		System.out.println("Sent public key to client");
+		System.out.println("Sent public key to client. Encoded: " + publicKeyEncoded);
 		
 		String premasterEncoded = server.receive();
 		byte[] premaster = base64Decoder.decode(premasterEncoded);
 		Cipher cipher = Cipher.getInstance(cipherAlgorithm);
 		cipher.init(Cipher.DECRYPT_MODE, keyPair.getPrivate());
 		byte[] serverPremaster = cipher.doFinal(premaster);
-		System.out.println("Received premaster from client");
+		System.out.println("Received premaster from client. Encoded: " + premasterEncoded);
 		
 		SessionKey sessionKey = new SessionKey();
 		sessionKey.setSessionKey(SessionKeyGenerator.generate(clientHello, serverHello, serverPremaster));

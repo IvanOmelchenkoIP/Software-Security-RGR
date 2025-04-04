@@ -16,7 +16,7 @@ import client.connection.ClientProcessor;
 public class Main {
 
 	private static String IP = "127.0.0.1";
-	private static int PORT = 10002;
+	private static int PORT = 10000;
 	
 	public static void main(String[] args) throws UnknownHostException, IOException, NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
 		Client client = new Client();
